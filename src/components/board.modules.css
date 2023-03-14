@@ -1,0 +1,22 @@
+.chess-board {
+  display: flex;
+  flex-wrap: wrap;
+  width: 500px;
+}
+.main {
+  display: flex;
+  justify-content: center;
+}
+
+.square {
+  width: 60px;
+  height: 60px;
+}
+
+.light {
+  background-image: url("../../light.svg");
+}
+
+.dark {
+  background-image: url("../../dark.svg");
+}
