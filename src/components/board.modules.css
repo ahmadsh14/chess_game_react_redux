@@ -20,3 +20,8 @@
 .dark {
   background-image: url("../../dark.svg");
 }
+
+img {
+  width: 40.02px;
+  height: 40.83px;
+}
