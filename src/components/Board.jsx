@@ -1,15 +1,32 @@
 import React, { useState } from "react";
 import "./board.css";
 import { statePieces } from "../pieces/StatePieces";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { initialState } from "../pieces/StatePieces";
 const Board = () => {
   const dispatch = useDispatch();
-  // const piecePositionStore = useSelector((state) => state.piecePosition);
-  const[piecePosition,setPiecePosition] = useState('')
-  console.log('piecePosition: ', piecePosition);
-  const piecePositionHandler = (event) => {
-    setPiecePosition(event.target.id);
+  const [pieceD, setPieceData] = useState([]);
+  console.log('pieceD: ', pieceD);
+
+  const piecePositionHandler = (i, j, square) => {
+    if (square.color === initialState.currentPlayer) {
+      initialState.selectedPiece = square.id;
+      const pieceData = {
+        row: i,
+        col: j,
+        piece: square,
+      };
+      setPieceData(pieceData);
+      console.log("pieceData: ", pieceData);
+      console.log(initialState.currentPlayer);
+    }
   };
+
+  const validMoves =() => {
+    if (pieceD.piece.sol === 'p'){
+      console.log("hi")
+    }
+  }
   return (
     <div className="main">
       {statePieces.map((row, i) => (
@@ -18,7 +35,7 @@ const Board = () => {
             <div
               className={`square ${(i + j) % 2 === 0 ? "light" : "dark"}`}
               key={`${i}-${j}`}
-              onClick={piecePositionHandler}
+              onClick={() => piecePositionHandler(i, j, square)}
             >
               {square.Image && (
                 <img src={square.Image} alt={square.id} id={`${i}-${j}`} />

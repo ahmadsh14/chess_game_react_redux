@@ -1,27 +1,26 @@
 import { legacy_createStore } from "redux";
-
-const initialState = {
-    row: null,
-    col: null,
-}
+import { initialState } from "../pieces/StatePieces";
+export const SELECT_PIECE = 'SELECT_PIECE';
+export const MOVE_PIECE = 'MOVE_PIECE';
 
 
-const piecReducer = (state = initialState, action) => {
-    console.log('action: ', action.type);
+// const selectPiece = () => ({
+//     type: SELECT_PIECE,
+//     payload:'' ,
+// });
 
 
 
 
-    // if (action.type === 'toggle') {
-    //     return {
-    //         showCounter: !state.showCounter,
-    //         counter: state.counter,
-    //     };
-    // }
+const pieceReducer = (state = initialState, action) => {
+    if (action.type) {
+        console.log('action.type: ', action.type);
+
+    }
 
     return state;
 }
 
-const store = legacy_createStore(piecReducer)
+const store = legacy_createStore(pieceReducer)
 
 export default store

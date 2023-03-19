@@ -82,3 +82,8 @@ export const statePieces = [
     pieces.white.rook,
   ]
 ]
+export const initialState = {
+  pieces: statePieces,
+  currentPlayer: 'white',
+  selectedPiece: null,
+};
