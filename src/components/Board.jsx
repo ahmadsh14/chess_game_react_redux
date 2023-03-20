@@ -1,68 +1,83 @@
-import React, { useState } from "react";
+import React from "react";
 import "./board.css";
-import { statePieces } from "../pieces/StatePieces";
-import { useDispatch } from "react-redux";
-import { initialState } from "../pieces/StatePieces";
-import { movePawn } from "../store";
+import { useDispatch, useSelector } from "react-redux";
+import { validMovesChanged } from "../store";
+import { MOVE_PAWN } from "../store";
+import { getValidMoves } from "../chess-rules";
 
 const Board = () => {
+  const { pieces, currentPlayer, selectedPiece, validMoves } = useSelector(
+    (state) => state
+  );
   const dispatch = useDispatch();
-  const [pieceD, setPieceData] = useState([]);
-  console.log('pieceD: ', pieceD);
-
   const piecePositionHandler = (i, j, square) => {
-    if (square.color === initialState.currentPlayer) {
-      initialState.selectedPiece = square.id;
-      const pieceData = {
-        row: i,
-        col: j,
-        piece: square,
-      };
-      setPieceData(pieceData);
-      console.log("pieceData: ", pieceData);
-      console.log(initialState.currentPlayer);
+    const newRow = i;
+    const newCol = j;
 
-      const validMoves = [];
-      const direction = square.color === "white" ? -1 : 1; // pawn moves in opposite directions for black and white
-      const startingRow = square.color === "white" ? 6 : 1; // row where the pawn starts
-      const currentRow = i;
-      const currentCol = j;
-      // check if the pawn can move forward one square
-      const oneSquareAhead = statePieces[currentRow + direction][currentCol];
-      console.log('oneSquareAhead: ', oneSquareAhead);
-      if (!oneSquareAhead) {
-        validMoves.push([currentRow + direction, currentCol]);
-      }
-      // check if the pawn can move forward two squares from starting position
-      if (currentRow === startingRow) {
-        const twoSquaresAhead = statePieces[currentRow + 2 * direction][currentCol];
-        console.log('twoSquaresAhead: ', twoSquaresAhead);
-        if (!twoSquaresAhead && !oneSquareAhead) {
-          validMoves.push([currentRow + 2 * direction, currentCol]);
-        }
-      }
-      // check if the pawn can capture diagonally
-      const leftDiagonal = statePieces[currentRow + direction][currentCol - 1];
-      const rightDiagonal = statePieces[currentRow + direction][currentCol + 1];
-      if (leftDiagonal && leftDiagonal.color !== square.color) {
-        validMoves.push([currentRow + direction, currentCol - 1]);
-      }
-      if (rightDiagonal && rightDiagonal.color !== square.color) {
-        validMoves.push([currentRow + direction, currentCol + 1]);
-      }
+    const handleFirstClick = () => {
+      if (square.color === currentPlayer) {
+        const pieceData = {
+          row: i,
+          col: j,
+          piece: square,
+        };
+        const validMovments = getValidMoves(pieceData, pieces);
 
-      console.log("Valid moves for pawn:", validMoves);
+        dispatch(validMovesChanged(validMovments, pieceData));
+      }
+    };
 
-   
+    const handleSecondClick = () => {
+      if (validMoves.some((move) => move[0] === newRow && move[1] === newCol)) {
+        console.log("Selected Piece", selectedPiece);
+      }
+      handleFirstClick();
+    };
 
+    if (!selectedPiece) {
+      handleFirstClick();
+    } else {
+      handleSecondClick();
     }
-  }
 
+    // if (validMoves.some((move) => move[0] === newRow && move[1] === newCol)) {
+    //   const oldLocation = statePieces[currentRow][currentCol];
+    //   console.log("oldLocation: ", oldLocation);
+    //   statePieces[currentRow][currentCol] = null;
+    //   statePieces[newRow][newCol] = oldLocation;
+    // }
+    // const piecePositionHandler = (i, j, square) => {
+    //   // ... existing code
 
+    //   const validMoves = [];
+    //   // ... existing code
+
+    //     const oldLocation = statePieces[currentRow][currentCol];
+    //     console.log("oldLocation: ", oldLocation);
+    //     statePieces[currentRow][currentCol] = null;
+    //     statePieces[newRow][newCol] = oldLocation;
+
+    //     dispatch(
+    //       movePawn({
+    //         oldRow: currentRow,
+    //         oldCol: currentCol,
+    //         newRow: newRow,
+    //         newCol: newCol,
+    //       })
+    //     );
+    //   }
+    // };
+
+    // if (validMoves.some((move) => move[0] === i && move[1] === j)) {
+    //   const oldLocation = statePieces[currentRow][currentCol];
+    //   console.log("oldLocation: ", oldLocation);
+    //   statePieces[newRow][newCol] = oldLocation;
+    // }
+  };
 
   return (
     <div className="main">
-      {statePieces.map((row, i) => (
+      {pieces.map((row, i) => (
         <div className="row" key={i}>
           {row.map((square, j) => (
             <div
@@ -70,7 +85,8 @@ const Board = () => {
               key={`${i}-${j}`}
               onClick={() => piecePositionHandler(i, j, square)}
             >
-              {`${i}-${j}`}{square.Image && (
+              {`${i}-${j}`}
+              {square.Image && (
                 <img src={square.Image} alt={square.id} id={`${i}-${j}`} />
               )}
             </div>

@@ -15,7 +15,8 @@ import rookWhite from "../img/rook-white.svg";
 export const pieces = {
   black: {
     king: { id: "kingB", Image: kingBlack },
-    bishop: { id: "bishopB", Image: bishopBlack, color: 'black' },
+    bishop1: { id: "bishopB1", Image: bishopBlack, color: 'black' },
+    bishop2: { id: "bishopB2", Image: bishopBlack, color: 'black' },
     pawn1: { id: "pawnB1", Image: pawnBlack, color: 'black' },
     pawn2: { id: "pawnB2", Image: pawnBlack, color: 'black' },
     pawn3: { id: "pawnB3", Image: pawnBlack, color: 'black' },
@@ -31,7 +32,8 @@ export const pieces = {
   white: {
     king: { id: "kingW", Image: kingWhite },
     knight: { id: "knightW", Image: knightWhite },
-    bishop: { id: "bishopW", Image: bishopWhite, color: 'white' },
+    bishop1: { id: "bishopW1", Image: bishopWhite, color: 'white' },
+    bishop2: { id: "bishopW2", Image: bishopWhite, color: 'white' },
     pawn1: { id: "pawnW1", Image: pawnWhite, color: 'white', sol: 'p' },
     pawn2: { id: "pawnW2", Image: pawnWhite, color: 'white' },
     pawn3: { id: "pawnW3", Image: pawnWhite, color: 'white' },
@@ -44,3 +46,7 @@ export const pieces = {
     rook: { id: "rookW", Image: rookWhite },
   },
 };
+
+
+
+

@@ -4,10 +4,10 @@ export const statePieces = [
   [
     pieces.black.rook,
     pieces.black.knight,
-    pieces.black.bishop,
+    pieces.black.bishop1,
     pieces.black.queen,
     pieces.black.king,
-    pieces.black.bishop,
+    pieces.black.bishop2,
     pieces.black.knight,
     pieces.black.rook,
   ],
@@ -74,16 +74,18 @@ export const statePieces = [
   [
     pieces.white.rook,
     pieces.white.knight,
-    pieces.white.bishop,
+    pieces.white.bishop1,
     pieces.white.queen,
     pieces.white.king,
-    pieces.white.bishop,
+    pieces.white.bishop2,
     pieces.white.knight,
     pieces.white.rook,
-  ]
-]
+  ],
+];
+
 export const initialState = {
   pieces: statePieces,
   currentPlayer: 'white',
   selectedPiece: null,
+  validMoves: []
 };
