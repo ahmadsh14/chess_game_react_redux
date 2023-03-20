@@ -1,26 +1,25 @@
 import { legacy_createStore } from "redux";
 import { initialState } from "../pieces/StatePieces";
-export const SELECT_PIECE = 'SELECT_PIECE';
-export const MOVE_PIECE = 'MOVE_PIECE';
 
 
-// const selectPiece = () => ({
-//     type: SELECT_PIECE,
-//     payload:'' ,
-// });
+// action types
+export const MOVE_PAWN = "MOVE_PAWN";
 
-
-
-
-const pieceReducer = (state = initialState, action) => {
-    if (action.type) {
-        console.log('action.type: ', action.type);
-
-    }
-
-    return state;
+// action creator
+export const movePawn = () => {
+  
 }
 
-const store = legacy_createStore(pieceReducer)
+
+  
+  const boardReducer = (state = initialState, action) => {
+    switch (action.type) {
+      case MOVE_PAWN:
+        return state;
+    }
+  };
+  
+
+const store = legacy_createStore(boardReducer)
 
 export default store

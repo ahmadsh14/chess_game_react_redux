@@ -38,7 +38,7 @@ export const statePieces = [
     "",
     "",
     "",
-    "",
+    pieces.black.pawn7,
     ""
   ],
   [
@@ -49,7 +49,7 @@ export const statePieces = [
     "",
     "",
     "",
-    ""
+    pieces.white.pawn2
   ],
   [
     "",
@@ -58,7 +58,7 @@ export const statePieces = [
     "",
     "",
     "",
-    "",
+    pieces.white.pawn1,
     ""
   ],
   [
