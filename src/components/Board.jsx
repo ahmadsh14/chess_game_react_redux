@@ -2,46 +2,61 @@ import React from "react";
 import "./board.css";
 import { useDispatch, useSelector } from "react-redux";
 import { validMovesChanged } from "../store";
-import { validMovesChangedBishop } from "../store";
-import { getValidMoves } from "../chess-rules";
+import { getPawnMoves } from "../chess-rules";
+import { getBishopMove } from "../chess-rules";
 import { boardHasChanged } from "../store";
-import { getBishopMoves } from "../chess-rules";
+import { setCurrentPlayer } from "../store";
 
 const Board = () => {
   const { pieces, currentPlayer, selectedPiece, validMoves } = useSelector(
     (state) => state
   );
+
+  Object.freeze(pieces);
   const dispatch = useDispatch();
   const piecePositionHandler = (i, j, square) => {
     const newRow = i;
     const newCol = j;
 
     const handleFirstClick = () => {
-      if (square.color === currentPlayer) {
+      if (square?.id && square.color === currentPlayer) {
         const pieceData = {
           row: i,
           col: j,
           piece: square,
         };
-        const validMovments = getValidMoves(pieceData, pieces);
-        const vaildMovesBishop = getBishopMoves(pieceData, pieces)
+        let validMovments = [];
+        if (square.id[0] === "p") {
+          validMovments = getPawnMoves(pieceData, pieces);
+        }
+        if (square.id[0] === "b") {
+          validMovments = getBishopMove(pieceData, pieces);
+        }
         dispatch(validMovesChanged(validMovments, pieceData));
-        dispatch(validMovesChangedBishop(vaildMovesBishop, pieceData));
-
       }
     };
 
     const handleSecondClick = () => {
       if (validMoves.some((move) => move[0] === newRow && move[1] === newCol)) {
-        const newPieces = JSON.parse(JSON.stringify(pieces)); // create a deep copy of the pieces array
-        const oldLocation = newPieces[selectedPiece.row][selectedPiece.col];
-        newPieces[selectedPiece.row][selectedPiece.col] = null;
-        newPieces[newRow][newCol] = oldLocation;
-        dispatch(boardHasChanged(newPieces));
-/*         dispatch(setCurrentPlayer(currentPlayer === "white" ? "black" : "white"));
- */      }
-      handleFirstClick();
+        const oldLocation = pieces[selectedPiece.row][selectedPiece.col];
+        pieces[selectedPiece.row][selectedPiece.col] = null;
+        pieces[newRow][newCol] = oldLocation;
+        let changeTurn = "";
+        if (currentPlayer === "white") {
+          changeTurn = "black";
+        } else {
+          changeTurn = "white";
+        }
+        dispatch(boardHasChanged(pieces));
+        dispatch(setCurrentPlayer(changeTurn));
+        changeTurn = "";
+      } else {
+        handleFirstClick();
+      }
     };
+    console.log("validMoves: ", validMoves);
+    console.log("selectedPiece: ", selectedPiece);
+    console.log("pieces: ", pieces);
     /*   const handleSecondClick = () => {
         if (validMoves.some((move) => move[0] === newRow && move[1] === newCol)) {
           console.log("Selected Piece", selectedPiece);
@@ -50,7 +65,7 @@ const Board = () => {
           pieces[selectedPiece.row][selectedPiece.col] = null;
           pieces[newRow][newCol] = oldLocation;
           dispatch(boardHasChanged(pieces));
-  
+
         }
         handleFirstClick();
       }; */
@@ -60,40 +75,6 @@ const Board = () => {
     } else {
       handleSecondClick();
     }
-
-    // if (validMoves.some((move) => move[0] === newRow && move[1] === newCol)) {
-    //   const oldLocation = statePieces[currentRow][currentCol];
-    //   console.log("oldLocation: ", oldLocation);
-    //   statePieces[currentRow][currentCol] = null;
-    //   statePieces[newRow][newCol] = oldLocation;
-    // }
-    // const piecePositionHandler = (i, j, square) => {
-    //   // ... existing code
-
-    //   const validMoves = [];
-    //   // ... existing code
-
-    //     const oldLocation = statePieces[currentRow][currentCol];
-    //     console.log("oldLocation: ", oldLocation);
-    //     statePieces[currentRow][currentCol] = null;
-    //     statePieces[newRow][newCol] = oldLocation;
-
-    //     dispatch(
-    //       movePawn({
-    //         oldRow: currentRow,
-    //         oldCol: currentCol,
-    //         newRow: newRow,
-    //         newCol: newCol,
-    //       })
-    //     );
-    //   }
-    // };
-
-    // if (validMoves.some((move) => move[0] === i && move[1] === j)) {
-    //   const oldLocation = statePieces[currentRow][currentCol];
-    //   console.log("oldLocation: ", oldLocation);
-    //   statePieces[newRow][newCol] = oldLocation;
-    // }
   };
 
   return (
@@ -102,14 +83,15 @@ const Board = () => {
         <div className="row" key={i}>
           {row.map((square, j) => (
             <div
-              className={`square ${(i + j) % 2 === 0 ? "light" : "dark"}` }
+              className={`square ${(i + j) % 2 === 0 ? "light" : "dark"}`}
               key={`${i}-${j}`}
               onClick={() => piecePositionHandler(i, j, square)}
             >
-              {`${i}-${j}`}
-              {square.Image && (
-                <img src={square.Image} alt={square.id} id={`${i}-${j}`} />
-              )}
+              <div className={`${(validMoves)? 'ck':''}`}>
+                {square?.Image && (
+                  <img src={square.Image} alt={square.id} id={`${i}-${j}`} />
+                )}
+              </div>
             </div>
           ))}
         </div>
