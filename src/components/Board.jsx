@@ -2,8 +2,10 @@ import React from "react";
 import "./board.css";
 import { useDispatch, useSelector } from "react-redux";
 import { validMovesChanged } from "../store";
-import { MOVE_PAWN } from "../store";
+import { validMovesChangedBishop } from "../store";
 import { getValidMoves } from "../chess-rules";
+import { boardHasChanged } from "../store";
+import { getBishopMoves } from "../chess-rules";
 
 const Board = () => {
   const { pieces, currentPlayer, selectedPiece, validMoves } = useSelector(
@@ -22,17 +24,36 @@ const Board = () => {
           piece: square,
         };
         const validMovments = getValidMoves(pieceData, pieces);
-
+        const vaildMovesBishop = getBishopMoves(pieceData, pieces)
         dispatch(validMovesChanged(validMovments, pieceData));
+        dispatch(validMovesChangedBishop(vaildMovesBishop, pieceData));
+
       }
     };
 
     const handleSecondClick = () => {
       if (validMoves.some((move) => move[0] === newRow && move[1] === newCol)) {
-        console.log("Selected Piece", selectedPiece);
-      }
+        const newPieces = JSON.parse(JSON.stringify(pieces)); // create a deep copy of the pieces array
+        const oldLocation = newPieces[selectedPiece.row][selectedPiece.col];
+        newPieces[selectedPiece.row][selectedPiece.col] = null;
+        newPieces[newRow][newCol] = oldLocation;
+        dispatch(boardHasChanged(newPieces));
+/*         dispatch(setCurrentPlayer(currentPlayer === "white" ? "black" : "white"));
+ */      }
       handleFirstClick();
     };
+    /*   const handleSecondClick = () => {
+        if (validMoves.some((move) => move[0] === newRow && move[1] === newCol)) {
+          console.log("Selected Piece", selectedPiece);
+          let oldLocation = pieces[selectedPiece.row][selectedPiece.col];
+          console.log("oldLocation: ", oldLocation);
+          pieces[selectedPiece.row][selectedPiece.col] = null;
+          pieces[newRow][newCol] = oldLocation;
+          dispatch(boardHasChanged(pieces));
+  
+        }
+        handleFirstClick();
+      }; */
 
     if (!selectedPiece) {
       handleFirstClick();
@@ -81,7 +102,7 @@ const Board = () => {
         <div className="row" key={i}>
           {row.map((square, j) => (
             <div
-              className={`square ${(i + j) % 2 === 0 ? "light" : "dark"}`}
+              className={`square ${(i + j) % 2 === 0 ? "light" : "dark"}` }
               key={`${i}-${j}`}
               onClick={() => piecePositionHandler(i, j, square)}
             >

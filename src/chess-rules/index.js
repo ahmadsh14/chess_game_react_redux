@@ -29,3 +29,53 @@ export const getValidMoves = (pieceData, pieces) => {
     return validMoves
 }
 
+export const getBishopMoves = (pieceData, pieces) => {
+    const validMoves = [];
+    const currentRow = pieceData.row;
+    const currentCol = pieceData.col;
+    // check diagonals
+    let i, j;
+    // top left
+    for (i = currentRow - 1, j = currentCol - 1; i >= 0 && j >= 0; i--, j--) {
+        if (pieces[i][j]) {
+            if (pieces[i][j].color !== pieces[currentRow][currentCol].color) {
+                validMoves.push([i, j]);
+            }
+            break;
+        }
+        validMoves.push([i, j]);
+    }
+    // top right
+    for (i = currentRow - 1, j = currentCol + 1; i >= 0 && j < 8; i--, j++) {
+        if (pieces[i][j]) {
+            if (pieces[i][j].color !== pieces[currentRow][currentCol].color) {
+                validMoves.push([i, j]);
+            }
+            break;
+        }
+        validMoves.push([i, j]);
+    }
+    // bottom left
+    for (i = currentRow + 1, j = currentCol - 1; i < 8 && j >= 0; i++, j--) {
+        if (pieces[i][j]) {
+            if (pieces[i][j].color !== pieces[currentRow][currentCol].color) {
+                validMoves.push([i, j]);
+            }
+            break;
+        }
+        validMoves.push([i, j]);
+    }
+    // bottom right
+    for (i = currentRow + 1, j = currentCol + 1; i < 8 && j < 8; i++, j++) {
+        if (pieces[i][j]) {
+            if (pieces[i][j].color !== pieces[currentRow][currentCol].color) {
+                validMoves.push([i, j]);
+            }
+            break;
+        }
+        validMoves.push([i, j]);
+    }
+
+    return validMoves;
+}
+
