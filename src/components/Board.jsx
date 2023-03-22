@@ -6,8 +6,11 @@ import { getPawnMoves } from "../chess-rules";
 import { getBishopMove } from "../chess-rules";
 import { boardHasChanged } from "../store";
 import { setCurrentPlayer } from "../store";
+import { historyChanged } from "../store";
+// import { useState } from "react";
 
 const Board = () => {
+  // const [colorValid, setColorValid] = useState("");
   const { pieces, currentPlayer, selectedPiece, validMoves } = useSelector(
     (state) => state
   );
@@ -33,20 +36,34 @@ const Board = () => {
           validMovments = getBishopMove(pieceData, pieces);
         }
         dispatch(validMovesChanged(validMovments, pieceData));
+        // const validMovesColor = validMoves;
+        // setColorValid(validMovesColor);
       }
     };
 
     const handleSecondClick = () => {
       if (validMoves.some((move) => move[0] === newRow && move[1] === newCol)) {
         const oldLocation = pieces[selectedPiece.row][selectedPiece.col];
+        const oldHistory = selectedPiece;
         pieces[selectedPiece.row][selectedPiece.col] = null;
         pieces[newRow][newCol] = oldLocation;
+        const die =''
+        // if (pieces[newRow][newCol]) {
+        //    die = `x`
+        // }
+        const newHistory = {
+          newRowLocation: newRow,
+          newColLocation: newCol,
+          kill: die,
+          oldHistory
+        };
         let changeTurn = "";
         if (currentPlayer === "white") {
           changeTurn = "black";
         } else {
           changeTurn = "white";
         }
+        dispatch(historyChanged(newHistory));
         dispatch(boardHasChanged(pieces));
         dispatch(setCurrentPlayer(changeTurn));
         changeTurn = "";
@@ -54,21 +71,6 @@ const Board = () => {
         handleFirstClick();
       }
     };
-    console.log("validMoves: ", validMoves);
-    console.log("selectedPiece: ", selectedPiece);
-    console.log("pieces: ", pieces);
-    /*   const handleSecondClick = () => {
-        if (validMoves.some((move) => move[0] === newRow && move[1] === newCol)) {
-          console.log("Selected Piece", selectedPiece);
-          let oldLocation = pieces[selectedPiece.row][selectedPiece.col];
-          console.log("oldLocation: ", oldLocation);
-          pieces[selectedPiece.row][selectedPiece.col] = null;
-          pieces[newRow][newCol] = oldLocation;
-          dispatch(boardHasChanged(pieces));
-
-        }
-        handleFirstClick();
-      }; */
 
     if (!selectedPiece) {
       handleFirstClick();
@@ -76,7 +78,6 @@ const Board = () => {
       handleSecondClick();
     }
   };
-
   return (
     <div className="main">
       {pieces.map((row, i) => (
@@ -87,11 +88,17 @@ const Board = () => {
               key={`${i}-${j}`}
               onClick={() => piecePositionHandler(i, j, square)}
             >
-              <div className={`${(validMoves)? 'ck':''}`}>
-                {square?.Image && (
-                  <img src={square.Image} alt={square.id} id={`${i}-${j}`} />
-                )}
-              </div>
+              <div
+                className={`${
+                  validMoves.some((move) => move[0] === i && move[1] === j)
+                    ? "ck"
+                    : ""
+                }`}
+              />
+
+              {square?.Image && (
+                <img src={square.Image} alt={square.id} id={`${i}-${j}`} />
+              )}
             </div>
           ))}
         </div>

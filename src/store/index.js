@@ -32,12 +32,10 @@ export const validMovesChanged = (validMovments, selectedPiece) => {
   }
 }
 
-export const historyChanged = () => {
+export const historyChanged = (newHistory) => {
   return {
-    type:HISTORY,
-    payload:{
-      
-    }
+    type: HISTORY,
+    payload: newHistory
   }
 }
 
@@ -61,6 +59,11 @@ const boardReducer = (state = initialState, action) => {
       return produce(state, (draft) => {
         draft.currentPlayer = action.payload
         draft.selectedPiece = null
+      })
+    case HISTORY:
+      return produce(state, (draft) => {
+        console.log(action.payload);
+        draft.firstLocation.push(action.payload)
       })
     default:
       return state;

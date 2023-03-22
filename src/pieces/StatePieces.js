@@ -87,5 +87,6 @@ export const initialState = {
   pieces: statePieces,
   currentPlayer: 'white',
   selectedPiece: null,
-  validMoves: []
+  validMoves: [],
+  firstLocation: [],
 };
