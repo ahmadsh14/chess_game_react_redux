@@ -38,7 +38,7 @@ export const statePieces = [
     "",
     "",
     "",
-    pieces.black.pawn7,
+    "",
     ""
   ],
   [
@@ -46,10 +46,10 @@ export const statePieces = [
     "",
     "",
     "",
-    pieces.white.bishop2,
     "",
     "",
-    pieces.white.pawn2
+    "",
+    ""
   ],
   [
     "",
@@ -58,7 +58,7 @@ export const statePieces = [
     "",
     "",
     "",
-    pieces.white.pawn1,
+    "",
     ""
   ],
   [
@@ -66,7 +66,7 @@ export const statePieces = [
     pieces.white.pawn2,
     pieces.white.pawn3,
     pieces.white.pawn4,
-    '',
+    pieces.white.pawn5,
     pieces.white.pawn6,
     pieces.white.pawn7,
     pieces.white.pawn8,
@@ -77,7 +77,7 @@ export const statePieces = [
     pieces.white.bishop1,
     pieces.white.queen,
     pieces.white.king,
-    '',
+    pieces.white.bishop2,
     pieces.white.knight,
     pieces.white.rook,
   ],

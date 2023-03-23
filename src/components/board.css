@@ -30,9 +30,10 @@ img {
   height: 3rem;
   position: absolute;
 }
+
 .ck {
   width: 2.75rem;
   height: 2.75rem;
   position: absolute;
-  background-color: #87ceeb;
+  background-color:chocolate
 }

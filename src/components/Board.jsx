@@ -45,26 +45,31 @@ const Board = () => {
       if (validMoves.some((move) => move[0] === newRow && move[1] === newCol)) {
         const oldLocation = pieces[selectedPiece.row][selectedPiece.col];
         const oldHistory = selectedPiece;
+        let die = ''
         pieces[selectedPiece.row][selectedPiece.col] = null;
+        if (pieces[newRow][newCol] !== null && pieces[newRow][newCol] !== '') {
+          die = 'x';
+
+        } else {
+          die = '=>';
+
+        }
         pieces[newRow][newCol] = oldLocation;
-        const die =''
-        // if (pieces[newRow][newCol]) {
-        //    die = `x`
-        // }
+
         const newHistory = {
           newRowLocation: newRow,
           newColLocation: newCol,
           kill: die,
           oldHistory
-        };
+        }
         let changeTurn = "";
         if (currentPlayer === "white") {
           changeTurn = "black";
         } else {
           changeTurn = "white";
         }
+        dispatch(validMovesChanged([]));
         dispatch(historyChanged(newHistory));
-        dispatch(boardHasChanged(pieces));
         dispatch(setCurrentPlayer(changeTurn));
         changeTurn = "";
       } else {
@@ -89,16 +94,13 @@ const Board = () => {
               onClick={() => piecePositionHandler(i, j, square)}
             >
               <div
-                className={`${
-                  validMoves.some((move) => move[0] === i && move[1] === j)
-                    ? "ck"
-                    : ""
-                }`}
+                className={`${validMoves.some((move) => move[0] === i && move[1] === j)
+                  ? "ck"
+                  : ""
+                  }`}
               />
-
-              {square?.Image && (
-                <img src={square.Image} alt={square.id} id={`${i}-${j}`} />
-              )}
+              {/*{`${i}-${j}`}*/}
+              {square?.Image && (<img src={square.Image} alt={square.id} id={`${i}-${j}`} />)}
             </div>
           ))}
         </div>
